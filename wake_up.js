@@ -2,6 +2,7 @@ require("dotenv").config();
 const fs = require("fs");
 const path = require("path");
 const { buildNtfyPayload } = require("./ntfy_priority");
+const { writeToNotion } = require("./notion_diary");
 const {
   formatDateTimeInTimeZone,
   getDatePartsInTimeZone,
@@ -501,6 +502,7 @@ ${historyText}`
 
   const diaryResult = extractDiaryFromResponse(rawAiText);
   const diarySaved = appendDiaryEntry(diaryResult.diaryContent);
+  if (diarySaved) await writeToNotion(diaryResult.diaryContent, getDiaryTimeString());
   const aiText = diaryResult.remainingText;
 
   let eventContent;
